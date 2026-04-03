@@ -3,17 +3,16 @@ import streamlit as st
 import numpy as np
 import warnings
 
-# Suppress warnings (optional)
+
 warnings.filterwarnings('ignore')
 
-# load trained model
 try:
     model = joblib.load("linear_regression_power_model.pkl")
 except Exception as e:
     st.error(f"Error loading model: {e}")
     st.stop()
 
-# rule-based function
+
 def usage_category(power):
     if power < 1:
         return "Low Usage", "Energy usage is efficient. Maintain current consumption habits."
@@ -22,11 +21,10 @@ def usage_category(power):
     else:
         return "High Usage", "High electricity usage detected. Reduce heavy appliance use."
 
-# UI
+
 st.title("Electricity Consumption Prediction App")
 st.write("Predict next-hour electricity usage based on previous consumption.")
 
-# user inputs - Fixed version
 col1, col2, col3 = st.columns(3)
 
 with col1:
@@ -59,22 +57,21 @@ with col3:
         format="%.2f"
     )
 
-# prediction button
+
 if st.button("Predict", type="primary"):
     try:
-        # Ensure all inputs are floats
+        
         input_data = np.array([[float(lag_1), float(lag_2), float(lag_3)]])
         
-        # Make prediction
+        
         prediction = model.predict(input_data)[0]
         
-        # Get category and suggestion
+     
         category, suggestion = usage_category(prediction)
         
-        # Display results
+       
         st.subheader("Prediction Result")
         
-        # Create metrics display
         col1, col2, col3 = st.columns(3)
         with col1:
             st.metric("Predicted Power", f"{prediction:.3f} kW")
